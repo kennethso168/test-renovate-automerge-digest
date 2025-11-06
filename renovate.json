@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":separatePatchReleases",
+    ":semanticCommits"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*@(v(?<currentValue>[0-9.]+)\\s)?((?<currentDigest>[0-9a-f]+)\\s)?"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Automerge patch, minor and digest updates (excluding pre-release) for approved packages. Ref https://docs.renovatebot.com/key-concepts/automerge/#automerge-non-major-updates",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true,
+      "ignoreTests": true
+    }
+  ]
+}
