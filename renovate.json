@@ -21,7 +21,6 @@
     {
       "description": "Automerge patch, minor and digest updates (excluding pre-release) for approved packages. Ref https://docs.renovatebot.com/key-concepts/automerge/#automerge-non-major-updates",
       "matchUpdateTypes": ["minor", "patch", "digest"],
-      "matchCurrentVersion": "!/^0/",
       "automerge": true,
       "ignoreTests": true
     }
