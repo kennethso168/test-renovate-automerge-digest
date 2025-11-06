@@ -1,0 +1,18 @@
+ARG CADDY_VERSION=2.10.0
+FROM caddy:${CADDY_VERSION}-builder AS builder
+
+RUN xcaddy build \
+    # renovate: datasource=github-releases depName=lucaslorentz/caddy-docker-proxy
+    --with github.com/lucaslorentz/caddy-docker-proxy@v2.9.2 \
+    # renovate: datasource=git-refs depName=https://github.com/mholt/caddy-dynamicdns.git
+    --with github.com/mholt/caddy-dynamicdns@b846b9e8fb83f52be540fb7876116f944e56d551 \
+    # renovate: datasource=github-tags depName=caddy-dns/rfc2136
+    --with github.com/caddy-dns/rfc2136@v1.0.0
+
+FROM caddy:${CADDY_VERSION}-alpine
+
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+
+RUN apk add -U --no-cache ca-certificates curl
+
+CMD ["caddy", "docker-proxy"]
